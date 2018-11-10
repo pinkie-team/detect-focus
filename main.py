@@ -27,12 +27,12 @@ def is_collision():
 
     if math.sqrt(pow(dx1, 2)+pow(dy1, 2)) <= r3:
         print('************************')
-        print('交点1: {} {}'.format(dx1, dy1))
+        print('1: {} {}'.format(kouten['x1'], kouten['y1']))
         print('************************')
         return True
     if math.sqrt(pow(dx2, 2)+pow(dy2, 2)) <= r3:
         print('************************')
-        print('交点2: {} {}'.format(dx2, dy2))
+        print('2: {} {}'.format(kouten['x2'], kouten['y2']))
         print('************************')
         return True
 
