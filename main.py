@@ -62,7 +62,6 @@ def calc_kouten():
     except ValueError:
         pass
 
-
     print(results)
     print('***************************')
 
@@ -134,6 +133,7 @@ def is_collision():
 
 if __name__ == '__main__':
     DEBUG = True
+    SOUND = False
 
     if DEBUG:
         window_width = 1440
@@ -148,7 +148,16 @@ if __name__ == '__main__':
 
     r1, r2, r3 = 1.0, 1.0, 1.0
 
+    # 取得したセンサー値（振動なら0.01とか、音なら0.5や11.5とか）
     while not is_collision():
-        r1 += 1.0
-        r2 += 1.0
-        r3 += 1.0
+        if SOUND:
+            value1, value2, value3 = 10.285823, 8.858796, 9.257178  # 音
+            #fixme そのままの値だと大きすぎて、実際の場所よりずれるので修正する
+            r1 += value1
+            r2 += value2
+            r3 += value3
+        else:
+            value1, value2, value3 = 0.05110727995634079, 0.02403908036649227, 0.012767072767019272  # 振動
+            r1 += 0.1 / value1
+            r2 += 0.1 / value2
+            r3 += 0.1 / value3
