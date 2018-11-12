@@ -175,7 +175,8 @@ if __name__ == '__main__':
 
     # 取得したセンサー値（振動なら0.01とか、音なら0.5や11.5とか）
     if SOUND:
-        decimal_value1, decimal_value2, decimal_value3 = 10.285823, 2.858796, 3.0257178  # 音
+        # TODO abs付けて絶対値にしよう！！　半径を増やす際にマイナスになって円が表示されなくなるぞ。
+        decimal_value1, decimal_value2, decimal_value3 = abs(2.285823), abs(0.858796), abs(0.0257178)  # 音（センサーから来た生データにはマイナスが付与されているので）
         max_count = get_remove_interger_zero_count([decimal_value1, decimal_value2, decimal_value3])
         value1, value2, value3 = decimal_value1*pow(10, max_count), decimal_value2*pow(10, max_count), decimal_value3*pow(10, max_count)
         min_value = min(value1, value2, value3)
