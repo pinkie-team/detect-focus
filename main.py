@@ -135,7 +135,7 @@ def get_remove_interger_zero_count(decimal_values):
     """
     与えられた数値の整数部に0があるパターンを除去するには何倍すれば良いかを求める
     :param decimal_values:  センサー値
-    :type   list
+    :type:   list
     :return:    何倍すれば全ての数値から0.111といった整数部が0のパターンを除去できるか
     :rtype: int
     """
