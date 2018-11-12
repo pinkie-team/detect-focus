@@ -62,8 +62,8 @@ def calc_kouten():
     except ValueError:
         pass
 
-    print(results)
-    print('***************************')
+    # print(results)
+    # print('***************************')
 
     return results
 
@@ -131,9 +131,34 @@ def is_collision():
     return False
 
 
+def get_remove_interger_zero_count(decimal_values):
+    """
+    与えられた数値の整数部に0があるパターンを除去するには何倍すれば良いかを求める
+    :param decimal_values:  センサー値
+    :type   list
+    :return:    何倍すれば全ての数値から0.111といった整数部が0のパターンを除去できるか
+    :rtype: int
+    """
+    count = 0
+
+    for decimal_value in decimal_values:
+        tmp_count = 0
+        integer = math.modf(decimal_value)[1]
+
+        while integer == 0:
+            decimal_value *= 10
+            integer = math.modf(decimal_value)[1]
+            tmp_count += 1
+
+        if count < tmp_count:
+            count = tmp_count
+
+    return count
+
+
 if __name__ == '__main__':
     DEBUG = True
-    SOUND = False
+    SOUND = True
 
     if DEBUG:
         window_width = 1440
@@ -149,15 +174,33 @@ if __name__ == '__main__':
     r1, r2, r3 = 1.0, 1.0, 1.0
 
     # 取得したセンサー値（振動なら0.01とか、音なら0.5や11.5とか）
+    if SOUND:
+        decimal_value1, decimal_value2, decimal_value3 = 10.285823, 2.858796, 3.0257178  # 音
+        max_count = get_remove_interger_zero_count([decimal_value1, decimal_value2, decimal_value3])
+        value1, value2, value3 = decimal_value1*pow(10, max_count), decimal_value2*pow(10, max_count), decimal_value3*pow(10, max_count)
+        min_value = min(value1, value2, value3)
+
+        r1_plus = value1 / min_value
+        r2_plus = value2 / min_value
+        r3_plus = value3 / min_value
+    else:
+        decimal_value1, decimal_value2, decimal_value3 = 0.05110727995634079, 0.02403908036649227, 0.012767072767019272  # 振動
+        r1_plus = 0.1 / decimal_value1
+        r2_plus = 0.1 / decimal_value2
+        r3_plus = 0.1 / decimal_value3
+
+    loop_count = 0
     while not is_collision():
-        if SOUND:
-            value1, value2, value3 = 10.285823, 8.858796, 9.257178  # 音
-            #fixme そのままの値だと大きすぎて、実際の場所よりずれるので修正する
-            r1 += value1
-            r2 += value2
-            r3 += value3
-        else:
-            value1, value2, value3 = 0.05110727995634079, 0.02403908036649227, 0.012767072767019272  # 振動
-            r1 += 0.1 / value1
-            r2 += 0.1 / value2
-            r3 += 0.1 / value3
+        loop_count += 1
+
+        if loop_count >= 300000:
+            print('**********************')
+            print('many loop')
+            print('**********************')
+            # TODO 無限ループに入りそうになったら、適当な座標を指定して表示しておく（ランダムにしてどっか表示とか）
+            break
+        r1 += r1_plus
+        r2 += r2_plus
+        r3 += r3_plus
+
+    print(loop_count)
